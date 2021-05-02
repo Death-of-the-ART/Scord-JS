@@ -6,4 +6,6 @@
 *.env
 .idea
 .vs
+/utils
 .vscode
+.utils

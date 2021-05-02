@@ -1,0 +1,19 @@
+{
+  "name": "scord-js",
+  "version": "3.0.0-debug",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "engines": {
+    "node": "14.16.1"
+  },
+  "author": "Death-of-the-ART",
+  "license": "MIT",
+  "repository": "https://github.com/Death-of-the-ART/Scord-JS",
+  "dependencies": {
+    "discord.js": "12.5.3",
+    "@discordjs/opus": "^0.5.0",
+    "ffmpeg-static": "^4.3.0"
+  }
+}
