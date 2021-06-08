@@ -1,4 +1,4 @@
-# SCORD JS 3.0.0-Debug
+# SCORD JS 3.2.0-Debug
 
 ![Scord-JS.png](assets/Scord-JS.png)
 

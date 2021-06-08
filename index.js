@@ -22,6 +22,22 @@ client.on('ready', () => {
     }
 });
 
+// Auto restart voice 1h
+client.on('ready', () => {
+    var minutes = 60,
+        the_interval = minutes * 60 * 1000;
+    setInterval(function() {
+        const channel = client.channels.cache.get(process.env.IDSTART)
+        if (channel != null) {
+            channel.send("!Radiodc")
+            setTimeout(() => { channel.send("!Radiop");
+        }, 3000);
+        } else {
+            console.log("|404|Undefined Start Channel")
+        }
+    }, the_interval);
+})
+
 //#region Commands - Cooldown
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 

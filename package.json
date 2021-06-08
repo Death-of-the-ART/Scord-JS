@@ -1,10 +1,9 @@
 {
   "name": "scord-js",
-  "version": "3.0.0-debug",
+  "version": "3.2.0-debug",
   "description": "",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "engines": {
     "node": "14.16.1"
   },
