@@ -22,16 +22,18 @@ client.on('ready', () => {
     }
 });
 
-// Auto restart voice 1h
+// Auto restart voice
 client.on('ready', () => {
-    var minutes = 60,
+    var minutes = 180,
         the_interval = minutes * 60 * 1000;
     setInterval(function() {
         const channel = client.channels.cache.get(process.env.IDSTART)
         if (channel != null) {
             channel.send("!Radiodc")
-            setTimeout(() => { channel.send("!Radiop");
-        }, 3000);
+            setTimeout(() => {
+                channel.send("!Radiop");
+                console.log("|7|RESTART_VOICE");
+            }, 5000);
         } else {
             console.log("|404|Undefined Start Channel")
         }
