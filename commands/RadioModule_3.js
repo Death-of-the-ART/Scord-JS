@@ -10,7 +10,7 @@ module.exports = {
             console.log(`|3|REQUEST_CONNECT[3] - ${message.author.tag}`);
             connection.play(process.env.STREAM3, { volume: false }, { bitrate: 44100 }, { highWaterMark: 100 });
             message.client.user.setActivity(process.env.STATUS3, { type: "LISTENING" })
-                .then(console.log(`|4|REQUEST_SUCCESSFUL[3]`), message.delete());
+                .then(console.log(`|4|REQUEST_SUCCESSFUL`), message.delete());
         }).catch(e => {
             console.error(e);
         });
