@@ -1,6 +1,6 @@
 module.exports = {
     name: 'radiodc',
-    description: 'Disconnect bot from channel!',
+    description: 'Disconnect bot from the channel!',
     cooldown: 5,
     execute(message) {
 

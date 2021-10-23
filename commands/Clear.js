@@ -1,6 +1,6 @@
 module.exports = {
     name: 'clear',
-    description: 'Clean up to 99 messages.',
+    description: 'Clean up to 99 messages!',
     guildOnly: true,
     cooldown: 5,
     execute(message, args) {

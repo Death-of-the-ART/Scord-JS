@@ -1,4 +1,4 @@
-# SCORD JS 3.0.0
+# SCORD JS 3.2.0
 
 ![Scord-JS.png](assets/Scord-JS.png)
 
@@ -39,25 +39,25 @@ Simple static 4Way music bot for one channel with deploy to Heroku
 
 | ENGINES | VERSION |
 | -------- | ------ | 
-| [Node.js](https://nodejs.org/) | 14.16.1 |
+| [Node.js](https://nodejs.org/) | 14.18.1 |
 
 | PACKAGE | VERSION |
 | -------- | ------ |
 |[discord.js](https://discord.js.org/#/) | 12.5.3 |
-| [@discordjs/opus](https://www.npmjs.com/package/@discordjs/opus) | 0.5.0 |
-| [ffmpeg-static](https://www.npmjs.com/package/ffmpeg-static)| 4.3.0 |
+| [@discordjs/opus](https://www.npmjs.com/package/@discordjs/opus) | 0.60 |
+| [ffmpeg-static](https://www.npmjs.com/package/ffmpeg-static)| 4.4.0 |
 
 ```sh
   "engines": {
-    "node": "14.16.1"
+    "node": "14.18.1"
   },
   "author": "Death-of-the-ART",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": "https://github.com/Death-of-the-ART/Scord-JS",
   "dependencies": {
     "discord.js": "12.5.3",
-    "@discordjs/opus": "^0.5.0",
-    "ffmpeg-static": "^4.3.0"
+    "@discordjs/opus": "^0.6.0",
+    "ffmpeg-static": "^4.4.0"
   }
 }
 ```

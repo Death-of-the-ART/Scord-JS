@@ -1,11 +1,8 @@
-﻿################################################################################
-# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
-################################################################################
-
-/node_modules
+﻿/node_modules
 *.env
 .idea
 .vs
 /utils
 .vscode
 .utils
+CODES.md
