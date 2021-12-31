@@ -44,7 +44,7 @@ Simple static 4Way music bot for one channel with deploy to Heroku
 | PACKAGE | VERSION |
 | -------- | ------ |
 |[discord.js](https://discord.js.org/#/) | 12.5.3 |
-| [@discordjs/opus](https://www.npmjs.com/package/@discordjs/opus) | 0.60 |
+| [@discordjs/opus](https://www.npmjs.com/package/@discordjs/opus) | 0.6.b0 |
 | [ffmpeg-static](https://www.npmjs.com/package/ffmpeg-static)| 4.4.0 |
 
 ```sh
