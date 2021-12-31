@@ -1,102 +1,96 @@
-const fs = require("fs")
-const Discord = require('discord.js');
-const { prefix } = require('./config.json');
+const fs = require("fs");
 
-const client = new Discord.Client();
-const cooldowns = new Discord.Collection();
-client.commands = new Discord.Collection();
+//Firebase
+const { initializeApp } = require('firebase/app');
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+const { firebaseConfig } = require('./firebaseTools/firebaseConfig.js');
 
-client.login(process.env.TOKEN)
+const app = initializeApp(firebaseConfig);
+const { data } = require('./firebaseTools/getData.js');
+
+const auth = getAuth();
+
+var email = process.env.MAIL;
+var password = process.env.PASS;
+
+// Login Firebase
+function Auth(params) {
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error);
+        });
+};
+
+// Discord
+const { Client, Collection, Intents } = require('discord.js');
+
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_VOICE_STATES] });
+client.commands = new Collection();
+
+client.login(process.env.TOKEN);
+
+module.exports = { client };
 
 // Login Report
-client.on('ready', () => {
+client.once('ready', () => {
     console.log(`|0|INVOKE_REQUEST`);
     console.log(`|2|INVOKE_SUCCESSFUL - ${client.user.tag}`);
-    client.user.setActivity('ONLINE', { type: "LISTENING" })
-    const channel = client.channels.cache.get(process.env.IDSTART)
+    client.user.setActivity('ONLINE', { type: "LISTENING" });
+    const channel = client.channels.cache.get(process.env.IDSTART);
     if (channel != null) {
-        channel.send("`|-----|SERVICE-ONLINE|-----|`")
-        channel.send("!Radiop")
+        channel.send("`|-----|SERVICE-ONLINE|-----|`");
     } else {
-        console.log("|404|Undefined Start Channel")
-    }
+        console.log("|404|Undefined Start Channel");
+    };
 });
 
-// Auto restart voice
-client.on('ready', () => {
-    var minutes = 240,
-        the_interval = minutes * 60 * 1000;
-    setInterval(() => {
-        const channel = client.channels.cache.get(process.env.IDSTART)
-        if (channel != null) {
-            client.channels.cache.get(process.env.IDVOICE).leave();
-            console.log("|7|RESTART_VOICE");
-            setTimeout(() => {
-                channel.send("!Radiop");
-            }, 7000);
-        } else {
-            console.log("|404|Undefined Start Channel")
-        }
-    }, the_interval);
-})
+const { Play, Connect, Disconnect } = require("./Player.js");
 
-//#region Commands - Cooldown
+// Autoplay
+client.on('ready', () => {
+    Connect();
+    Play();
+});
+
+// Autoreconnect
+client.on('ready', () => {
+    const timeout = 240 * 60 * 1000;
+    setTimeout(() => {
+        console.log("|7|RESTART_VOICE")
+        Disconnect();
+        setInterval(() => {
+            Connect();
+            Play();
+        }, 5000);
+    }, timeout);
+});
+
+// Commands
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
     const command = require(`./commands/${file}`);
-    client.commands.set(command.name, command);
+    // Set a new item in the Collection
+    // With the key as the command name and the value as the exported module
+    client.commands.set(command.data.name, command);
 }
-client.on('message', message => {
-    if (!message.content.startsWith(prefix)) return;
 
-    const args = message.content.slice(prefix.length).split(/ +/);
-    const commandName = args.shift().toLowerCase();
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand() && !interaction.isContextMenu()) return;
 
-    const command = client.commands.get(commandName) ||
-        client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    const command = client.commands.get(interaction.commandName);
 
     if (!command) return;
 
-    if (command.guildOnly && message.channel.type !== 'text') {
-        return message.reply('I can\'t execute that command inside DMs!');
-    }
-
-    if (command.args && !args.length) {
-        let reply = `You didn't provide any arguments, ${message.author}!`;
-
-        if (command.usage) {
-            reply += `\nThe proper usage would be: \`${prefix}${command.name} ${command.usage}\``;
-        }
-
-        return message.channel.send(reply);
-    }
-
-    if (!cooldowns.has(command.name)) {
-        cooldowns.set(command.name, new Discord.Collection());
-    }
-
-    const now = Date.now();
-    const timestamps = cooldowns.get(command.name);
-    const cooldownAmount = (command.cooldown || 3) * 1000;
-
-    if (timestamps.has(message.author.id)) {
-        const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
-
-        if (now < expirationTime) {
-            const timeLeft = (expirationTime - now) / 1000;
-            return message.reply(`please wait ${timeLeft.toFixed(1)} more second(s) before reusing the \`${command.name}\` command.`);
-        }
-    }
-
-    timestamps.set(message.author.id, now);
-    setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
     try {
-        command.execute(message, args);
+        await command.execute(interaction);
     } catch (error) {
         console.error(error);
-        message.reply('there was an error trying to execute that command!');
+        await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
     }
 });
-//#endregion
