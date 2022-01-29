@@ -18,6 +18,7 @@ function Auth(params) {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
+            data();
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -25,6 +26,8 @@ function Auth(params) {
             console.log(error);
         });
 };
+
+Auth();
 
 // Discord
 const { Client, Collection, Intents } = require('discord.js');
